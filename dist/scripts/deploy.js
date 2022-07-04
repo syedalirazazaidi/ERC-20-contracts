@@ -22,6 +22,9 @@ async function main() {
     console.log("Token address:", token.address);
     const CrowdSale = await hardhat_1.ethers.getContractFactory("CrowdSale");
     const crowdSale = await CrowdSale.deploy(token.address);
+    const SampleToken = await hardhat_1.ethers.getContractFactory("SampleToken");
+    const sampletoken = await SampleToken.deploy();
+    console.log("sampletoken ------ Contract address:", sampletoken.address);
     console.log("Crowdsale Contract address:", crowdSale.address);
     const grantRoleTx = await token.grantRole(await token.MINTER_ROLE(), crowdSale.address);
     // wait until the transaction is mined

@@ -1,3 +1,4 @@
+import { SampleToken } from "./../typechain/SampleToken.d";
 // We require the Hardhat Runtime Environment explicitly here. This is optional
 // but useful for running the script in a standalone fashion through `node <script>`.
 //
@@ -32,6 +33,9 @@ async function main() {
 
   const CrowdSale = await ethers.getContractFactory("CrowdSale");
   const crowdSale: CrowdSale = await CrowdSale.deploy(token.address);
+  const SampleToken = await ethers.getContractFactory("SampleToken");
+  const sampletoken: SampleToken = await SampleToken.deploy();
+  console.log("sampletoken ------ Contract address:", sampletoken.address);
 
   console.log("Crowdsale Contract address:", crowdSale.address);
 
