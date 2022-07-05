@@ -19,7 +19,7 @@ async function main() {
 
   const [deployer] = await ethers.getSigners();
 
-  console.log("Deploying contracts with the account:", deployer.address);
+  // console.log("Deploying contracts with the account:", deployer.address);
 
   console.log(
     "Account balance Ether:",
@@ -29,7 +29,8 @@ async function main() {
   const Token = await ethers.getContractFactory("MyToken");
   const token: MyToken = await Token.deploy();
 
-  console.log("Token address:", token.address);
+  // console.log("Token address:", token.address);
+  // 0xfee270c5AE93A76e18B234D0e8B1863734A4fAC9
 
   const CrowdSale = await ethers.getContractFactory("CrowdSale");
   const crowdSale: CrowdSale = await CrowdSale.deploy(token.address);
@@ -37,7 +38,7 @@ async function main() {
   const sampletoken: SampleToken = await SampleToken.deploy();
   console.log("sampletoken ------ Contract address:", sampletoken.address);
 
-  console.log("Crowdsale Contract address:", crowdSale.address);
+  // console.log("Crowdsale Contract address:", crowdSale.address);
 
   const grantRoleTx = await token.grantRole(
     await token.MINTER_ROLE(),
