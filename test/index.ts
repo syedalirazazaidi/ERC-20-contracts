@@ -69,6 +69,25 @@ describe("DappToken", function () {
       initialOwnerBalance
     );
   });
+
+  it("should update balances after transation", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+
+    const dappTOken: DappToken__factory = await ethers.getContractFactory(
+      "DappToken"
+    );
+    const dacentToken = await dappTOken.deploy();
+    const initalOwnerBalnace: any = await dacentToken.balanceOf(owner.address);
+
+    await dacentToken.transfer(addr1.address, 5);
+    await dacentToken.transfer(addr2.address, 10);
+    const finalBalace = await dacentToken.balanceOf(owner.address);
+    expect(finalBalace).to.equal(initalOwnerBalnace - 15);
+    const addr1Balnce = await dacentToken.balanceOf(addr1.address);
+    expect(addr1Balnce).to.equal(5);
+    const addr2Balnce = await dacentToken.balanceOf(addr2.address);
+    expect(addr2Balnce).to.equal(10);
+  });
 });
 
 // describe("DappToken", () => {
