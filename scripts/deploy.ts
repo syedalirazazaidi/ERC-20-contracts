@@ -42,8 +42,6 @@ async function main() {
   const Dappcent = await ethers.getContractFactory("DappToken");
 
   const dappcent: DappToken = await Dappcent.deploy();
-  console.log(dappcent.address);
-  console.log("---", dappcent.balanceOf(dappcent.address));
 
   dappcent.totalSupply().then(function (con) {
     console.log(con, "DappToken ------ Balance:");

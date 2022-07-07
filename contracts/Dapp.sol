@@ -13,6 +13,21 @@ contract DappToken is ERC20 {
         _balances[msg.sender] = initialSupply;
     }
 
+    function transfer(address to, uint256 amount)
+        public
+        virtual
+        override
+        returns (bool)
+    {
+        require(_balances[msg.sender] >= amount, "Not enought Token");
+        _balances[msg.sender] -= amount;
+        _balances[to] += amount;
+        return true;
+        // address owner = _msgSender();
+        // _transfer(owner, to, amount);
+        // return true;
+    }
+
     function decimals() public view virtual override returns (uint8) {
         return 18;
     }

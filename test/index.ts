@@ -1,3 +1,4 @@
+import { address } from "./../node_modules/hardhat/src/internal/core/config/config-validation";
 import { DappToken__factory } from "./../typechain/factories/DappToken__factory";
 import { PakToken } from "./../typechain/PakToken.d";
 import { PakToken__factory } from "./../typechain/factories/PakToken__factory";
@@ -13,16 +14,30 @@ import { Signer } from "ethers";
 
 describe("DappToken", function () {
   it("total supply of owner", async function () {
-    const [owner, addr1, addr2, ...addrs]: SignerWithAddress[] =
-      await ethers.getSigners();
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
 
     const dappTOken: DappToken__factory = await ethers.getContractFactory(
       "DappToken"
     );
     const dacentToken = await dappTOken.deploy();
     const ownerBalance = await dacentToken.balanceOf(owner.address);
-    console.log(ownerBalance, "BALANCE___");
+
     expect(await dacentToken.totalSupply()).to.equal(ownerBalance);
+  });
+  it("Should transertoken between accounts", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+
+    const dappTOken: DappToken__factory = await ethers.getContractFactory(
+      "DappToken"
+    );
+    const dacentToken = await dappTOken.deploy();
+
+    // transfer 10 tokens from owner to address;
+    await dacentToken.transfer(addr1.address, 10);
+    expect(await dacentToken.balanceOf(addr1.address)).to.equal(10);
+    // transfer 5  tokens from addr1 to addr2
+    await dacentToken.connect(addr1).transfer(addr2.address, 5);
+    expect(await dacentToken.balanceOf(addr2.address)).to.equal(5);
   });
 });
 
