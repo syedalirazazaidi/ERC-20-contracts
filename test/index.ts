@@ -39,6 +39,22 @@ describe("DappToken", function () {
     await dacentToken.connect(addr1).transfer(addr2.address, 5);
     expect(await dacentToken.balanceOf(addr2.address)).to.equal(5);
   });
+  it("Transation token from addr1 to addr2", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+
+    const dappTOken: DappToken__factory = await ethers.getContractFactory(
+      "DappToken"
+    );
+    const dacentToken = await dappTOken.deploy();
+
+    // transfer 10 tokens from owner to address;
+    await dacentToken.transfer(addr1.address, 10);
+    const addr1balance = await dacentToken.balanceOf(addr1.address);
+    expect(addr1balance).to.equal(10);
+    await dacentToken.connect(addr1).transfer(addr2.address, 5);
+    const addr2balance = await dacentToken.balanceOf(addr2.address);
+    expect(addr2balance).to.equal(5);
+  });
 });
 
 // describe("DappToken", () => {
