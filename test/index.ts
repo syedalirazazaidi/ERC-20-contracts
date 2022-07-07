@@ -55,6 +55,20 @@ describe("DappToken", function () {
     const addr2balance = await dacentToken.balanceOf(addr2.address);
     expect(addr2balance).to.equal(5);
   });
+  it("should fail if sender does not have enough balance", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+
+    const dappTOken: DappToken__factory = await ethers.getContractFactory(
+      "DappToken"
+    );
+    const dacentToken = await dappTOken.deploy();
+    const initialOwnerBalance = await dacentToken.balanceOf(owner.address);
+    await expect(dacentToken.connect(addr1).transfer(owner.address, 1)).to.be
+      .reverted;
+    expect(await dacentToken.balanceOf(owner.address)).to.equal(
+      initialOwnerBalance
+    );
+  });
 });
 
 // describe("DappToken", () => {
