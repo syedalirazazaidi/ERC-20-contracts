@@ -1,3 +1,4 @@
+import { DappToken } from "./../typechain/DappToken.d";
 import { SampleToken } from "./../typechain/SampleToken.d";
 // We require the Hardhat Runtime Environment explicitly here. This is optional
 // but useful for running the script in a standalone fashion through `node <script>`.
@@ -21,10 +22,10 @@ async function main() {
 
   // console.log("Deploying contracts with the account:", deployer.address);
 
-  console.log(
-    "Account balance Ether:",
-    (await deployer.getBalance()).toString()
-  );
+  // console.log(
+  //   "Account balance Ether:",
+  //   (await deployer.getBalance()).toString()
+  // );
 
   const Token = await ethers.getContractFactory("MyToken");
   const token: MyToken = await Token.deploy();
@@ -36,7 +37,17 @@ async function main() {
   const crowdSale: CrowdSale = await CrowdSale.deploy(token.address);
   const SampleToken = await ethers.getContractFactory("SampleToken");
   const sampletoken: SampleToken = await SampleToken.deploy();
-  console.log("sampletoken ------ Contract address:", sampletoken.address);
+  // console.log("sampletoken ------ Contract address:", sampletoken.address);
+
+  const Dappcent = await ethers.getContractFactory("DappToken");
+
+  const dappcent: DappToken = await Dappcent.deploy();
+  console.log(dappcent.address);
+  console.log("---", dappcent.balanceOf(dappcent.address));
+
+  dappcent.totalSupply().then(function (con) {
+    console.log(con, "DappToken ------ Balance:");
+  });
 
   // console.log("Crowdsale Contract address:", crowdSale.address);
 
@@ -57,7 +68,7 @@ async function main() {
 
   const bal = await token.balanceOf(deployer.address);
 
-  console.log("My MyToken Balance is:", bal);
+  // console.log("My MyToken Balance is:", bal);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
