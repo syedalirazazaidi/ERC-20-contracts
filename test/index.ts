@@ -77,17 +77,57 @@ describe("DappToken", function () {
       "DappToken"
     );
     const dacentToken = await dappTOken.deploy();
-    const initalOwnerBalnace: any = await dacentToken.balanceOf(owner.address);
+    const initalOwnerBalnace = await dacentToken.balanceOf(owner.address);
 
     await dacentToken.transfer(addr1.address, 5);
     await dacentToken.transfer(addr2.address, 10);
     const finalBalace = await dacentToken.balanceOf(owner.address);
-    expect(finalBalace).to.equal(initalOwnerBalnace - 15);
+
+    expect(finalBalace).to.equal(initalOwnerBalnace.toNumber() - 15);
     const addr1Balnce = await dacentToken.balanceOf(addr1.address);
     expect(addr1Balnce).to.equal(5);
     const addr2Balnce = await dacentToken.balanceOf(addr2.address);
     expect(addr2Balnce).to.equal(10);
   });
+  it("should emit Transfer events", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+
+    const dappTOken: DappToken__factory = await ethers.getContractFactory(
+      "DappToken"
+    );
+    const dacentToken = await dappTOken.deploy();
+
+    // Transfer 50 tokens from owner to addr1
+    await expect(dacentToken.transfer(addr1.address, 50))
+      .to.emit(dacentToken, "Transfer")
+      .withArgs(owner.address, addr1.address, 50);
+
+    // Transfer 50 tokens from addr1 to addr2
+    // We use .connect(signer) to send a transaction from another account
+    await expect(dacentToken.connect(addr1).transfer(addr2.address, 50))
+      .to.emit(dacentToken, "Transfer")
+      .withArgs(addr1.address, addr2.address, 50);
+  });
+
+  //   it("transfer token from adr1 to addr2 ", async function () {
+  //     const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+
+  //     const dappTOken: DappToken__factory = await ethers.getContractFactory(
+  //       "DappToken"
+  //     );
+  //     const dacentToken = await dappTOken.deploy();
+  //     const add1Balance = await dacentToken.balanceOf(addr1.address);
+
+  //     await dacentToken.transfer(addr2.address, 5);
+  //     // await dacentToken.transfer(addr2.address, 10);
+  //     //  const finalBalace = await dacentToken.balanceOf(owner.address);
+
+  //     expect(finalBalace).to.equal(initalOwnerBalnace.toNumber() - 15);
+  //     const addr1Balnce = await dacentToken.balanceOf(addr1.address);
+  //     expect(addr1Balnce).to.equal(5);
+  //     const addr2Balnce = await dacentToken.balanceOf(addr2.address);
+  //     expect(addr2Balnce).to.equal(10);
+  //   });
 });
 
 // describe("DappToken", () => {

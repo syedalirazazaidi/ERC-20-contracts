@@ -1,3 +1,4 @@
+import { address } from "./../node_modules/hardhat/src/internal/core/config/config-validation";
 import { DappToken } from "./../typechain/DappToken.d";
 import { SampleToken } from "./../typechain/SampleToken.d";
 // We require the Hardhat Runtime Environment explicitly here. This is optional
@@ -46,8 +47,6 @@ async function main() {
   dappcent.totalSupply().then(function (con) {
     console.log(con, "DappToken ------ Balance:");
   });
-
-  // console.log("Crowdsale Contract address:", crowdSale.address);
 
   const grantRoleTx = await token.grantRole(
     await token.MINTER_ROLE(),
