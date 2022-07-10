@@ -160,6 +160,29 @@ describe("DappToken", function () {
       "Joao has not the correct allowance"
     );
   });
+  it("Should be possible for the contract owner to mint new tokens", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+    const ErcToken: any = await ethers.getContractFactory("ErcToken");
+
+    const erctoken = await ErcToken.deploy(50000, "NiceToken", "NTKN", 18);
+    await erctoken.deployed();
+    let ali = owner;
+    let rizwan = addr1;
+
+    let totalSupply = await erctoken.totalSupply();
+    let rizwanBalance = await erctoken.balanceOf(await rizwan.getAddress());
+    assert.equal(
+      totalSupply.toNumber(),
+      50000,
+      "Contract has not the correct initial supply"
+    );
+
+    assert.equal(
+      rizwanBalance.toNumber(),
+      0,
+      "Lucas balance is not initally empty"
+    );
+  });
 });
 
 // describe("DappToken", () => {
