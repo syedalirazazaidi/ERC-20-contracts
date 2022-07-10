@@ -31,12 +31,10 @@ async function main() {
     // console.log("sampletoken ------ Contract address:", sampletoken.address);
     const Dappcent = await hardhat_1.ethers.getContractFactory("DappToken");
     const dappcent = await Dappcent.deploy();
-    console.log(dappcent.address);
-    console.log("---", dappcent.balanceOf(dappcent.address));
+    console.log("sampletoken ------ Contract address:", dappcent.address);
     dappcent.totalSupply().then(function (con) {
         console.log(con, "DappToken ------ Balance:");
     });
-    // console.log("Crowdsale Contract address:", crowdSale.address);
     const grantRoleTx = await token.grantRole(await token.MINTER_ROLE(), crowdSale.address);
     // wait until the transaction is mined
     await grantRoleTx.wait();

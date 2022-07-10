@@ -1,3 +1,4 @@
+import { ErcToken } from "./../typechain/ErcToken.d";
 import { address } from "./../node_modules/hardhat/src/internal/core/config/config-validation";
 import { DappToken } from "./../typechain/DappToken.d";
 import { SampleToken } from "./../typechain/SampleToken.d";
@@ -28,42 +29,46 @@ async function main() {
   //   (await deployer.getBalance()).toString()
   // );
 
-  const Token = await ethers.getContractFactory("MyToken");
-  const token: MyToken = await Token.deploy();
+  // const Token = await ethers.getContractFactory("MyToken");
+  // const token: MyToken = await Token.deploy();
 
   // console.log("Token address:", token.address);
   // 0xfee270c5AE93A76e18B234D0e8B1863734A4fAC9
 
-  const CrowdSale = await ethers.getContractFactory("CrowdSale");
-  const crowdSale: CrowdSale = await CrowdSale.deploy(token.address);
-  const SampleToken = await ethers.getContractFactory("SampleToken");
-  const sampletoken: SampleToken = await SampleToken.deploy();
+  // const CrowdSale = await ethers.getContractFactory("CrowdSale");
+  // const crowdSale: CrowdSale = await CrowdSale.deploy(token.address);
+  // const SampleToken = await ethers.getContractFactory("SampleToken");
+  // const sampletoken: SampleToken = await SampleToken.deploy();
   // console.log("sampletoken ------ Contract address:", sampletoken.address);
 
-  const Dappcent = await ethers.getContractFactory("DappToken");
+  // const Dappcent = await ethers.getContractFactory("DappToken");
+  const Ercand = await ethers.getContractFactory("Ercand");
+  const ercand: ErcToken = await Ercand.deploy();
+  // console.log(ercand);
 
-  const dappcent: DappToken = await Dappcent.deploy();
+  // const dappcent: DappToken = await Dappcent.deploy();
+  // console.log("Token deploy to:", dappcent.address);
 
-  dappcent.totalSupply().then(function (con) {
-    console.log(con, "DappToken ------ Balance:");
-  });
+  // dappcent.totalSupply().then(function (con) {
+  //   console.log(con, "DappToken ------ Balance:");
+  // });
 
-  const grantRoleTx = await token.grantRole(
-    await token.MINTER_ROLE(),
-    crowdSale.address
-  );
-
-  // wait until the transaction is mined
-  await grantRoleTx.wait();
-
-  const buyTx = await crowdSale.buyToken({
-    value: ethers.utils.parseEther("0.05"),
-  });
+  // const grantRoleTx = await token.grantRole(
+  //   await token.MINTER_ROLE(),
+  //   crowdSale.address
+  // );
 
   // wait until the transaction is mined
-  await buyTx.wait();
+  // await grantRoleTx.wait();
 
-  const bal = await token.balanceOf(deployer.address);
+  // const buyTx = await crowdSale.buyToken({
+  //   value: ethers.utils.parseEther("0.05"),
+  // });
+
+  // wait until the transaction is mined
+  // await buyTx.wait();
+
+  // const bal = await token.balanceOf(deployer.address);
 
   // console.log("My MyToken Balance is:", bal);
 }

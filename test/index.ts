@@ -1,3 +1,6 @@
+import { name } from "./../node_modules/jest-util/node_modules/ci-info/index.d";
+import { ErcToken__factory } from "./../typechain/factories/ErcToken__factory";
+import { ErcToken } from "./../typechain/ErcToken.d";
 import { address } from "./../node_modules/hardhat/src/internal/core/config/config-validation";
 import { DappToken__factory } from "./../typechain/factories/DappToken__factory";
 import { PakToken } from "./../typechain/PakToken.d";
@@ -107,6 +110,31 @@ describe("DappToken", function () {
     await expect(dacentToken.connect(addr1).transfer(addr2.address, 50))
       .to.emit(dacentToken, "Transfer")
       .withArgs(addr1.address, addr2.address, 50);
+  });
+  it("Should have the correct setup", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+    const ErcToken: any = await ethers.getContractFactory("ErcToken");
+    // const ErcToken: ErcToken__factory = await ethers.getContractFactory(
+    //   "ErcToken"
+    // );
+    const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
+    const supply = await erctoken.totalSupply();
+    expect(supply).to.equal(5000000);
+
+    // expect(supply.toNumber()).to.equal(initalOwnerBalnace.toNumber() - 15);
+    // assert.equal(
+    //   supply.toNumber(),
+    //   5000000,
+    //   "Initial supply was not the same as in migration"
+    // );
+
+    // const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
+    // await erctoken.deployed();
+    // const supply = await erctoken;
+    // const ownerBalance = await erctoken.balanceOf(await owner.getAddress());
+    // const tokenName = await erctoken.name();
+    // const tokenSymbol = await erctoken.symbol();
+    // const tokenDecimals = await erctoken.decimals();
   });
 
   //   it("transfer token from adr1 to addr2 ", async function () {
