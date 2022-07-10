@@ -136,16 +136,24 @@ describe("DappToken", function () {
     const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
     const ErcToken: any = await ethers.getContractFactory("ErcToken");
 
-    const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
+    const erctoken = await ErcToken.deploy(50000, "NiceToken", "NTKN", 18);
     let ali = owner;
     let lucas = addr1;
     let joao = addr2;
     await erctoken.transfer(await lucas.getAddress(), 10000);
+    const lucasBalnace = await erctoken.balanceOf(lucas.address);
+    expect(lucasBalnace).to.equal(10000);
+    const ownerBalance = await erctoken.balanceOf(ali.address);
+    expect(ownerBalance).to.equal(40000);
     await erctoken.connect(lucas).approve(await joao.getAddress(), 5000);
+    const joaoBalnace = await erctoken.balanceOf(joao.address);
+    expect(joaoBalnace).to.equal(0);
+
     const joaoAllowance = await erctoken.allowance(
       await lucas.getAddress(),
       await joao.getAddress()
     );
+
     assert.equal(
       joaoAllowance.toNumber(),
       5000,
