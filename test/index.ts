@@ -8,7 +8,7 @@ import { PakToken__factory } from "./../typechain/factories/PakToken__factory";
 import { PToken } from "./../typechain/PToken.d";
 import { PToken__factory } from "./../typechain/factories/PToken__factory";
 import { ethers, waffle } from "hardhat";
-import { expect } from "chai";
+import { expect, assert } from "chai";
 import { Address } from "cluster";
 import { MyToken, MyToken__factory, DappToken } from "../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
@@ -114,48 +114,44 @@ describe("DappToken", function () {
   it("Should have the correct setup", async function () {
     const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
     const ErcToken: any = await ethers.getContractFactory("ErcToken");
-    // const ErcToken: ErcToken__factory = await ethers.getContractFactory(
-    //   "ErcToken"
-    // );
+
     const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
     const supply = await erctoken.totalSupply();
-    expect(supply).to.equal(5000000);
+    const tokenName = await erctoken.name();
+    const tokenSymbol = await erctoken.symbol();
+    const tokenDecimals = await erctoken.decimals();
 
-    // expect(supply.toNumber()).to.equal(initalOwnerBalnace.toNumber() - 15);
-    // assert.equal(
-    //   supply.toNumber(),
-    //   5000000,
-    //   "Initial supply was not the same as in migration"
-    // );
-
-    // const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
-    // await erctoken.deployed();
-    // const supply = await erctoken;
-    // const ownerBalance = await erctoken.balanceOf(await owner.getAddress());
-    // const tokenName = await erctoken.name();
-    // const tokenSymbol = await erctoken.symbol();
-    // const tokenDecimals = await erctoken.decimals();
+    expect(supply).to.equal(
+      5000000,
+      "Initial supply was not the same as in migration"
+    );
+    expect(tokenSymbol).to.equal("NTKN", "Contract has not the correct symbol");
+    expect(tokenName).to.equal(
+      "NiceToken",
+      "Initial supply was not the same as in migration"
+    );
+    expect(tokenDecimals).to.equal(18, "Contract decimals is not correct");
   });
+  it("Should be possible for an account to approve another to manage some of its tokens", async function () {
+    const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
+    const ErcToken: any = await ethers.getContractFactory("ErcToken");
 
-  //   it("transfer token from adr1 to addr2 ", async function () {
-  //     const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
-
-  //     const dappTOken: DappToken__factory = await ethers.getContractFactory(
-  //       "DappToken"
-  //     );
-  //     const dacentToken = await dappTOken.deploy();
-  //     const add1Balance = await dacentToken.balanceOf(addr1.address);
-
-  //     await dacentToken.transfer(addr2.address, 5);
-  //     // await dacentToken.transfer(addr2.address, 10);
-  //     //  const finalBalace = await dacentToken.balanceOf(owner.address);
-
-  //     expect(finalBalace).to.equal(initalOwnerBalnace.toNumber() - 15);
-  //     const addr1Balnce = await dacentToken.balanceOf(addr1.address);
-  //     expect(addr1Balnce).to.equal(5);
-  //     const addr2Balnce = await dacentToken.balanceOf(addr2.address);
-  //     expect(addr2Balnce).to.equal(10);
-  //   });
+    const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
+    let ali = owner;
+    let lucas = addr1;
+    let joao = addr2;
+    await erctoken.transfer(await lucas.getAddress(), 10000);
+    await erctoken.connect(lucas).approve(await joao.getAddress(), 5000);
+    const joaoAllowance = await erctoken.allowance(
+      await lucas.getAddress(),
+      await joao.getAddress()
+    );
+    assert.equal(
+      joaoAllowance.toNumber(),
+      5000,
+      "Joao has not the correct allowance"
+    );
+  });
 });
 
 // describe("DappToken", () => {

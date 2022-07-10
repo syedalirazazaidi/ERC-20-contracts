@@ -15,6 +15,11 @@ contract ErcToken is Ownable {
     mapping(address => mapping(address => uint256)) private _allowances;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 
     constructor(
         uint256 tokenTotalSupply,
@@ -50,5 +55,61 @@ contract ErcToken is Ownable {
 
     function name() external view returns (string memory) {
         return _name;
+    }
+
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal {
+        require(
+            sender != address(0),
+            "Token: cannot transfer from zero address"
+        );
+        require(
+            recipient != address(0),
+            "Token: cannot transfer to zero address"
+        );
+        require(
+            _balances[sender] >= amount,
+            "Token: cannot transfer more than account owns"
+        );
+
+        _balances[recipient] = _balances[recipient] + amount;
+        _balances[sender] = _balances[sender] - amount;
+        emit Transfer(sender, recipient, amount);
+    }
+
+    function allowance(address owner, address spender)
+        external
+        view
+        returns (uint256)
+    {
+        return _allowances[owner][spender];
+    }
+
+    function _approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal {
+        require(owner != address(0), "Token: zero address cannot approve");
+        require(spender != address(0), "Token: cannot approve zero address");
+
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
+    }
+
+    function approve(address spender, uint256 amount) external returns (bool) {
+        _approve(msg.sender, spender, amount);
+        return true;
+    }
+
+    function transfer(address recipient, uint256 amount)
+        external
+        returns (bool)
+    {
+        _transfer(msg.sender, recipient, amount);
+        return true;
     }
 }

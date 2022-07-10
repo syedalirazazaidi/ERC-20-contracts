@@ -70,22 +70,27 @@ describe("DappToken", function () {
             .to.emit(dacentToken, "Transfer")
             .withArgs(addr1.address, addr2.address, 50);
     });
-    //   it("transfer token from adr1 to addr2 ", async function () {
-    //     const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();
-    //     const dappTOken: DappToken__factory = await ethers.getContractFactory(
-    //       "DappToken"
-    //     );
-    //     const dacentToken = await dappTOken.deploy();
-    //     const add1Balance = await dacentToken.balanceOf(addr1.address);
-    //     await dacentToken.transfer(addr2.address, 5);
-    //     // await dacentToken.transfer(addr2.address, 10);
-    //     //  const finalBalace = await dacentToken.balanceOf(owner.address);
-    //     expect(finalBalace).to.equal(initalOwnerBalnace.toNumber() - 15);
-    //     const addr1Balnce = await dacentToken.balanceOf(addr1.address);
-    //     expect(addr1Balnce).to.equal(5);
-    //     const addr2Balnce = await dacentToken.balanceOf(addr2.address);
-    //     expect(addr2Balnce).to.equal(10);
-    //   });
+    it("Should have the correct setup", async function () {
+        const [owner, addr1, addr2, ...addrs] = await hardhat_1.ethers.getSigners();
+        const ErcToken = await hardhat_1.ethers.getContractFactory("ErcToken");
+        const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
+        const supply = await erctoken.totalSupply();
+        const tokenName = await erctoken.name();
+        const tokenSymbol = await erctoken.symbol();
+        const tokenDecimals = await erctoken.decimals();
+        chai_1.expect(supply).to.equal(5000000, "Initial supply was not the same as in migration");
+        chai_1.expect(tokenSymbol).to.equal("NTKN", "Contract has not the correct symbol");
+        chai_1.expect(tokenName).to.equal("NiceToken", "Initial supply was not the same as in migration");
+        chai_1.expect(tokenDecimals).to.equal(18, "Contract decimals is not correct");
+    });
+    it("Should be possible for an account to approve another to manage some of its tokens", async function () {
+        const [owner, addr1, addr2, ...addrs] = await hardhat_1.ethers.getSigners();
+        const ErcToken = await hardhat_1.ethers.getContractFactory("ErcToken");
+        const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
+        let ali = owner.address;
+        let lucas = addr1;
+        let joao = addr2;
+    });
 });
 // describe("DappToken", () => {
 //   let daaptoken: DappToken;
