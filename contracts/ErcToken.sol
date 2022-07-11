@@ -112,4 +112,40 @@ contract ErcToken is Ownable {
         _transfer(msg.sender, recipient, amount);
         return true;
     }
+
+    function _mint(address account, uint256 amount) internal {
+        require(account != address(0), "Token: cannot mint to zero address");
+        _totalSupply = _totalSupply + amount;
+        _balances[account] = _balances[account] + amount;
+        emit Transfer(address(0), account, amount);
+    }
+
+    function _burn(address account, uint256 amount) internal {
+        require(account != address(0), "Token: cannot burn from zero address");
+        require(
+            _balances[account] >= amount,
+            "Token: cannot burn more than account owns"
+        );
+        _balances[account] = _balances[account] - amount;
+        _totalSupply = _totalSupply - amount;
+        emit Transfer(account, address(0), amount);
+    }
+
+    function burn(address account, uint256 amount)
+        public
+        onlyOwner
+        returns (bool)
+    {
+        _burn(account, amount);
+        return true;
+    }
+
+    function mint(address account, uint256 amount)
+        public
+        onlyOwner
+        returns (bool)
+    {
+        _mint(account, amount);
+        return true;
+    }
 }
