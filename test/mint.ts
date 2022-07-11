@@ -1,7 +1,5 @@
-import { ErcToken__factory } from "./../typechain/factories/ErcToken__factory";
 import { ethers, waffle } from "hardhat";
 import { expect, assert } from "chai";
-import { DappToken__factory } from "../typechain";
 describe("Token Mint", function () {
   it("Should be possible for the contract owner to mint new tokens", async function () {
     const [owner, addr1, addr2, ...addrs]: any = await ethers.getSigners();

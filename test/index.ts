@@ -1,19 +1,6 @@
-import { name } from "./../node_modules/jest-util/node_modules/ci-info/index.d";
-import { ErcToken__factory } from "./../typechain/factories/ErcToken__factory";
-import { ErcToken } from "./../typechain/ErcToken.d";
-import { address } from "./../node_modules/hardhat/src/internal/core/config/config-validation";
 import { DappToken__factory } from "./../typechain/factories/DappToken__factory";
-import { PakToken } from "./../typechain/PakToken.d";
-import { PakToken__factory } from "./../typechain/factories/PakToken__factory";
-import { PToken } from "./../typechain/PToken.d";
-import { PToken__factory } from "./../typechain/factories/PToken__factory";
-import { ethers, waffle } from "hardhat";
+import { ethers } from "hardhat";
 import { expect, assert } from "chai";
-import { Address } from "cluster";
-import { MyToken, MyToken__factory, DappToken } from "../typechain";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { BigNumber } from "@ethersproject/bignumber";
-import { Signer } from "ethers";
 
 describe("DappToken", function () {
   it("total supply of owner", async function () {
