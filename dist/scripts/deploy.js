@@ -30,9 +30,10 @@ async function main() {
     // const sampletoken: SampleToken = await SampleToken.deploy();
     // console.log("sampletoken ------ Contract address:", sampletoken.address);
     // const Dappcent = await ethers.getContractFactory("DappToken");
-    const Ercand = await hardhat_1.ethers.getContractFactory("ErcToken");
+    const Ercand = await hardhat_1.ethers.getContractFactory("ErcToken", deployer);
     const ercand = await Ercand.deploy(5000000, "NiceToken", "NTKN", 18);
-    console.log(ercand);
+    await ercand.deployed();
+    console.log(`Token Contract deployed to address: ${ercand.address}`);
     // const ercand: ErcToken = await Ercand.deploy();
     // console.log(ercand);
     // const dappcent: DappToken = await Dappcent.deploy();

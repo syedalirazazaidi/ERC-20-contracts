@@ -86,107 +86,31 @@ describe("DappToken", function () {
     it("Should be possible for an account to approve another to manage some of its tokens", async function () {
         const [owner, addr1, addr2, ...addrs] = await hardhat_1.ethers.getSigners();
         const ErcToken = await hardhat_1.ethers.getContractFactory("ErcToken");
-        const erctoken = await ErcToken.deploy(5000000, "NiceToken", "NTKN", 18);
-        let ali = owner.address;
+        const erctoken = await ErcToken.deploy(50000, "NiceToken", "NTKN", 18);
+        let ali = owner;
         let lucas = addr1;
         let joao = addr2;
+        await erctoken.transfer(await lucas.getAddress(), 10000);
+        const lucasBalnace = await erctoken.balanceOf(lucas.address);
+        chai_1.expect(lucasBalnace).to.equal(10000);
+        const ownerBalance = await erctoken.balanceOf(ali.address);
+        chai_1.expect(ownerBalance).to.equal(40000);
+        await erctoken.connect(lucas).approve(await joao.getAddress(), 5000);
+        const joaoBalnace = await erctoken.balanceOf(joao.address);
+        chai_1.expect(joaoBalnace).to.equal(0);
+        const joaoAllowance = await erctoken.allowance(await lucas.getAddress(), await joao.getAddress());
+        chai_1.assert.equal(joaoAllowance.toNumber(), 5000, "Joao has not the correct allowance");
+    });
+    it("Should be possible for the contract owner to mint new tokens", async function () {
+        const [owner, addr1, addr2, ...addrs] = await hardhat_1.ethers.getSigners();
+        const ErcToken = await hardhat_1.ethers.getContractFactory("ErcToken");
+        const erctoken = await ErcToken.deploy(50000, "NiceToken", "NTKN", 18);
+        await erctoken.deployed();
+        let ali = owner;
+        let rizwan = addr1;
+        let totalSupply = await erctoken.totalSupply();
+        let rizwanBalance = await erctoken.balanceOf(await rizwan.getAddress());
+        chai_1.assert.equal(totalSupply.toNumber(), 50000, "Contract has not the correct initial supply");
+        chai_1.assert.equal(rizwanBalance.toNumber(), 0, "Lucas balance is not initally empty");
     });
 });
-// describe("DappToken", () => {
-//   let daaptoken: DappToken;
-//   let owner: SignerWithAddress;
-//   let addr1: SignerWithAddress;
-//   let addr2: SignerWithAddress;
-//   let addrs: SignerWithAddress[];
-//   beforeEach(async () => {
-//     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
-//     daaptoken: DappToken__factory = await ethers.getContractFactory(
-//       "DappToken"
-//     );
-//     const decent = await daaptoken.deploy();
-//   });
-//   describe("Deployment", function () {
-//     it("Initial owner Balance should be equal to", async function () {
-//       const ownerBalance = await daaptoken.balanceOf(owner.address);
-//       console.log("ownerBalance:", ownerBalance);
-//       expect(await ownerBalance).to.equal(100000000000000);
-//       //   expect(await daaptoken.totalSupply()).to.equal(ownerBalance);
-//     });
-//   });
-// });
-// describe("PToken"),
-//   function () {
-// it("Deployement should assign the total supply", async function () {
-//   const [owner]: SignerWithAddress[] = await ethers.getSigners();
-//   console.log("Signer objects:",owner);
-//   const PToken = await ethers.getContractFactory(
-//     "Token"
-//   );
-//   const ptoken = await PToken.deploy();
-//   await ptoken.deployed();
-// }
-// };
-// describe("PakToken", function () {
-//   beforeEach(async function () {
-//     const Token: PakToken__factory = await ethers.getContractFactory(
-//       "PakToken"
-//     );
-//     const [owner, addr1, addr2, ...addrs]: SignerWithAddress[] =
-//       await ethers.getSigners();
-//     var paktoken = await Token.deploy();
-//     // expect(await paktoken.);
-//   });
-//   describe("Deployment", function () {
-//     it("should set the right owner", async function () {
-//       expect(await paktoken.balanceOf(owner.address));
-//     });
-//   });
-// });
-// describe("PakToken", function () {
-//   it("Deployement should assign the total supply", async function () {
-//     const [owner]: SignerWithAddress[] = await ethers.getSigners();
-//     const Paktoken: PakToken__factory = await ethers.getContractFactory(
-//       "PakToken"
-//     );
-//     const paktoken: PakToken = await Paktoken.deploy();
-//     const ownerBalance = await paktoken.balanceOf(owner.address);
-//     // await paktoken.deployed();
-//     expect(await paktoken.totalSupply()).to.equal(ownerBalance); //ownerBal=100000000000000
-//     // expect(await paktoken.balanceOf(await owner.getAddress())).to.equal(1000);
-//   });
-//   it("Should Transfer token between accounts", async function () {
-//     const [owner, addr1, addr2]: SignerWithAddress[] =
-//       await ethers.getSigners();
-//     const Paktoken: PakToken__factory = await ethers.getContractFactory(
-//       "PakToken"
-//     );
-//     const paktoken: PakToken = await Paktoken.deploy();
-//     // transfer 10 token from owner to addr1
-//     await paktoken.transfer(addr1.address, 10);
-//     expect(await paktoken.balanceOf(addr1.address)).to.equal(10);
-//     await paktoken.connect(addr1).transfer(addr2.address, 5);
-//     expect(await paktoken.balanceOf(addr2.address)).to.equal(5);
-//   });
-// });
-// it("Should return the total coins = owners coins", async function () {
-//   const [owner, addr1]: SignerWithAddress[] = await ethers.getSigners();
-//   const FirstCoin: MyToken__factory = await ethers.getContractFactory(
-//     "MyToken"
-//   );
-//   const firstCoin: MyToken = await FirstCoin.deploy();
-//   await firstCoin.deployed();
-//   await firstCoin.mint(owner.address, 1000);
-//   expect(await firstCoin.totalSupply()).to.equal(1000);
-//   expect(await firstCoin.balanceOf(await owner.getAddress())).to.equal(1000);
-// });
-//   it("Should transfer coins correctly", async function () {
-//     const [owner, addr1] = await ethers.getSigners();
-//     const FirstCoin = await ethers.getContractFactory("MyToken");
-//     const firstCoin = await FirstCoin.deploy();
-//     await firstCoin.deployed();
-//     await firstCoin.mint(owner.address, 1000);
-//     await firstCoin.transfer(await addr1.getAddress(), 10);
-//     expect(await firstCoin.balanceOf(await owner.getAddress())).to.equal(990);
-//     expect(await firstCoin.balanceOf(await addr1.getAddress())).to.equal(10);
-//   });
-//  });
