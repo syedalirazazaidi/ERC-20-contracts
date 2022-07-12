@@ -47,6 +47,14 @@ async function main() {
   await ercand.deployed();
   console.log(`Token Contract deployed to address: ${ercand.address}`);
 
+  const ErcCrowdSale = await ethers.getContractFactory(
+    "ErcTokenSale",
+    deployer
+  );
+  const erccrowdSale = await ErcCrowdSale.deploy();
+  await erccrowdSale.deployed();
+  console.log(`Token Contract deployed to address: ${erccrowdSale.address}`);
+
   // const ercand: ErcToken = await Ercand.deploy();
   // console.log(ercand);
 

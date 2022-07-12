@@ -2,13 +2,16 @@
 pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./ErcToken.sol";
 
 contract ErcTokenSale is ERC20 {
+    ErcToken public tokenContract;
     uint256 public initialSupply = 1000000 * 10**8;
     address public admin;
 
-    constructor() ERC20("Gold", "GLD") {
+    constructor(ErcToken _tokenContract) ERC20("Gold", "GLD") {
         admin = msg.sender;
+        tokenContract = _tokenContract;
         // _mint(msg.sender, initialSupply);
     }
 
